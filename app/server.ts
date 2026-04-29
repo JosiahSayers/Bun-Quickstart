@@ -5,12 +5,14 @@ import { attachLogger } from "$/middleware/attach-logger";
 import { requestLogger } from "$/middleware/request-logger";
 import { toNodeHandler } from "better-auth/node";
 import { auth } from "$/utils/auth";
+import { frontendRouter } from "$/routers/frontend";
 
 export const app = express();
 app.use(stashRequestMetadata, attachLogger, requestLogger);
-app.all("/api/auth/*", toNodeHandler(auth));
+app.all("/api/auth/{*any}", toNodeHandler(auth));
 app.disable("x-powered-by");
 
 app.use(express.json());
 
 app.use(healthRouter);
+app.use(frontendRouter);

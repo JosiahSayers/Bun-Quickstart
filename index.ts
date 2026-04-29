@@ -1,5 +1,7 @@
 import { logger } from "$/utils/logger";
-import { app } from "./app/server";
+import { app } from "$/server";
+
+console.log("hi");
 
 app.listen(Bun.env.PORT, (err) => {
   if (err) {
