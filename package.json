@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "bun --watch index.ts",
     "db:reset": "bunx --bun prisma migrate reset && bun db:migrate && bun db:seed",
-    "db:migrate": "bunx --bun prisma migrate dev && bunx --bun prisma generate"
+    "db:migrate": "bunx --bun prisma migrate dev && bunx --bun prisma generate",
+    "test": "bun test --watch",
+    "test:single": "bun test"
   },
   "devDependencies": {
     "@types/bun": "latest",
@@ -19,6 +21,7 @@
     "@prisma/adapter-libsql": "^7.8.0",
     "@prisma/client": "^7.8.0",
     "@types/express": "^5.0.6",
-    "express": "^5.2.1"
+    "express": "^5.2.1",
+    "winston": "^3.19.0"
   }
 }

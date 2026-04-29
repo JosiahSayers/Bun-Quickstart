@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { HealthChecks } from "../utils/health-checks";
+import { HealthChecks } from "$/utils/health-checks";
 
 export const healthRouter = Router();
 

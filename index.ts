@@ -1,3 +1,4 @@
+import { logger } from "$/utils/logger";
 import { app } from "./app/server";
 
 app.listen(Bun.env.PORT, (err) => {
@@ -5,5 +6,5 @@ app.listen(Bun.env.PORT, (err) => {
     console.error(err);
   }
 
-  console.log(`Ready to accept connections`);
+  logger.info(`Ready to accept connections`);
 });
