@@ -1,8 +1,12 @@
-import { describe, it, expect, spyOn, afterEach, mock } from "bun:test";
-import { HealthChecks } from "$/utils/health-checks";
+import { describe, it, expect, mock, afterEach } from "bun:test";
 
 describe("run", () => {
+  afterEach(() => {
+    mock.restore();
+  });
+
   it("returns the expected result when successful", async () => {
+    const { HealthChecks } = await import("$/utils/health-checks");
     expect(await HealthChecks.run()).toMatchInlineSnapshot(`
       {
         "database": "connected",
@@ -11,19 +15,30 @@ describe("run", () => {
     `);
   });
 
-  // Bun module mocking bug https://github.com/oven-sh/bun/issues/10428
-  it.skip("returns the expected result when there is a failure", async () => {
-    mock.module("$/utils/db", () => ({
-      $queryRaw: () => {
-        throw new Error();
-      },
-    }));
+  // mock.module does not do any hoising so it needs called before dependencies are imported
+  // https://github.com/oven-sh/bun/issues/10428
+  it("returns the expected result when there is a failure", async () => {
+    mock.module("$/utils/db", async () => {
+      const actualDb = require("$/utils/db");
+      return {
+        db: {
+          ...actualDb.db,
+          $queryRaw: () => {
+            throw new Error();
+          },
+        },
+      };
+    });
+
+    const { HealthChecks } = await import("$/utils/health-checks");
+
     expect(await HealthChecks.run()).toMatchInlineSnapshot(`
       {
         "database": "fail",
         "failures": [
           "database",
         ],
+        "redis": "PONG",
       }
     `);
   });
