@@ -1,4 +1,4 @@
-import winston from "winston";
+import winston, { type transport } from "winston";
 
 export const logger = winston.createLogger({
   level: "info",
@@ -9,7 +9,12 @@ export const logger = winston.createLogger({
   ),
   defaultMeta: { version: (await Bun.file("./version").text())?.trim() },
   exitOnError: false,
-  transports: [
+  transports: getTransports(),
+  silent: Bun.env.NODE_ENV === "test",
+});
+
+function getTransports() {
+  const transports: transport[] = [
     //
     // - Write all logs with importance level of `error` or higher to `error.log`
     //   (i.e., error, fatal, but not other levels)
@@ -26,17 +31,15 @@ export const logger = winston.createLogger({
     new winston.transports.File({
       filename: `${Bun.env.LOG_FOLDER}/combined.log`,
     }),
-  ],
-});
+  ];
 
-//
-// If we're not in production then log to the `console` with the format:
-// `${info.level}: ${info.message} JSON.stringify({ ...rest }) `
-//
-if (process.env.NODE_ENV !== "production") {
-  logger.add(
-    new winston.transports.Console({
-      format: winston.format.simple(),
-    }),
-  );
+  if (process.env.NODE_ENV !== "production") {
+    transports.push(
+      new winston.transports.Console({
+        format: winston.format.simple(),
+      }),
+    );
+  }
+
+  return transports;
 }

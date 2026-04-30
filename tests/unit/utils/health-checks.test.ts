@@ -1,11 +1,12 @@
 import { describe, it, expect, spyOn, afterEach, mock } from "bun:test";
-import { HealthChecks } from "../../app/utils/health-checks";
+import { HealthChecks } from "$/utils/health-checks";
 
 describe("run", () => {
   it("returns the expected result when successful", async () => {
     expect(await HealthChecks.run()).toMatchInlineSnapshot(`
       {
         "database": "connected",
+        "redis": "PONG",
       }
     `);
   });

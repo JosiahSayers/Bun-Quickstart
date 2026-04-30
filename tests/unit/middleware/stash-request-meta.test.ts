@@ -1,5 +1,5 @@
 import { describe, it, mock, expect, spyOn } from "bun:test";
-import { stashRequestMetadata } from "../../app/middleware/stash-request-meta";
+import { stashRequestMetadata } from "$/middleware/stash-request-meta";
 
 describe("stashRequestMetadata", () => {
   it("stashes the current time to start", () => {
