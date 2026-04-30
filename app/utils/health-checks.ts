@@ -1,4 +1,5 @@
 import { db } from "$/utils/db";
+import { RedisClient } from "bun";
 
 export class HealthChecks {
   private static CHECKS = [
@@ -7,6 +8,13 @@ export class HealthChecks {
       runner: async () => {
         await db.$queryRaw`SELECT 1`;
         return "connected";
+      },
+    },
+    {
+      name: "redis",
+      runner: async () => {
+        const client = new RedisClient(undefined, { maxRetries: 0 });
+        return client.ping();
       },
     },
   ] as const;
