@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "predev": "docker compose -f docker-compose.dev.yml up -d",
-    "dev": "NODE_ENV=development bun --watch index.ts",
+    "dev": "VERSION=$(cat version) NODE_ENV=development bun --watch index.ts",
     "dev:workers": "NODE_ENV=development bun --watch app/jobs/workers/index.ts",
     "db:reset": "bunx --bun prisma migrate reset && bun db:migrate && bun db:seed",
     "db:migrate": "bunx --bun prisma migrate dev && bunx --bun prisma generate",
@@ -28,6 +28,8 @@
     "better-auth": "^1.6.9",
     "bullmq": "^5.76.4",
     "express": "^5.2.1",
-    "winston": "^3.19.0"
+    "express-zod-safe": "^3.2.1",
+    "winston": "^3.19.0",
+    "zod": "^4.4.1"
   }
 }

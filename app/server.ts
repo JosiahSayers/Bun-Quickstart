@@ -6,6 +6,7 @@ import { requestLogger } from "$/middleware/request-logger";
 import { toNodeHandler } from "better-auth/node";
 import { auth } from "$/utils/auth";
 import { frontendRouter } from "$/routers/frontend";
+import { apiRouter } from "$/routers/api";
 
 export const app = express();
 app.use(stashRequestMetadata, attachLogger, requestLogger);
@@ -15,4 +16,5 @@ app.disable("x-powered-by");
 app.use(express.json());
 
 app.use(healthRouter);
-app.use(frontendRouter);
+app.use("/api", apiRouter);
+app.use(frontendRouter); // Needs to be the final router
