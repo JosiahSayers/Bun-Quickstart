@@ -7,6 +7,17 @@ jobs:
   test:
     name: build-app
     runs-on: ubuntu-latest
+    services:
+      redis:
+        image: redis
+        # Set health checks to wait until redis has started
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -15,7 +26,7 @@ jobs:
       - name: Run tests
         run: bun test
         env:
-          DATABASE_URL: ${{ runner.temp }}/ci.db
+          DATABASE_URL: file:${{ runner.temp }}/ci.db
           PORT: 3000
           LOG_FOLDER: ${{ runner.temp }}/logs
           BETTER_AUTH_SECRET: ci-secret
