@@ -14,3 +14,9 @@ jobs:
         uses: ./.github/actions/setup
       - name: Run tests
         run: bun test
+        env:
+          DATABASE_URL: ${{ runner.temp }}/ci.db
+          PORT: 3000
+          LOG_FOLDER: ${{ runner.temp }}/logs
+          BETTER_AUTH_SECRET: ci-secret
+          BETTER_AUTH_URL: "http://localhost:3000"

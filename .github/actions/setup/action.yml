@@ -6,3 +6,8 @@ runs:
     - name: Install dependencies
       run: bun install
       shell: bash
+    - name: Setup Database
+      run: bunx --bun prisma migrate deploy && bunx --bun prisma generate
+      shell: bash
+      env:
+        DATABASE_URL: file:${{ runner.temp }}/ci.db
